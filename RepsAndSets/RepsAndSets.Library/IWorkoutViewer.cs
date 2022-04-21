@@ -17,7 +17,7 @@ namespace RepsAndSets.Library
         void ActivatePlayMode();
         void UpdatePlaymode(PlayMode targetPlayMode);
         void EndWorkout();
-        void StopAllTimers();
+        void EndAllTimers();
         void ResetWorkout();
         void StartCurrentTask();
         void PauseCurrentTask();

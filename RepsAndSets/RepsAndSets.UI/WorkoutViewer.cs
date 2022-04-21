@@ -45,7 +45,7 @@ namespace RepsAndSets.UI
             }
             AddNewTask();
 
-            // Enable edit mode
+            // TODO - Enable edit mode here
 
         }
 
@@ -66,9 +66,7 @@ namespace RepsAndSets.UI
         }
 
         public void RemoveTask(TaskUI taskUI) {
-            taskUILayoutPanel.Controls.Remove(taskUI);
-            taskUIs.Remove(taskUI);
-            tasks.Remove(taskUI.TaskModel);
+
 
         }
 
@@ -95,48 +93,28 @@ namespace RepsAndSets.UI
             OnClickActionButton();
         }
 
-        private void OnClickActionButton() {
-            switch (currentPlayMode) {
-                case PlayMode.Idle:
-                    ActivatePlayMode();
-                    UpdatePlaymode(PlayMode.Playing);
-                    break;
-                case PlayMode.Playing:
-                    PauseCurrentTask();
-                    UpdatePlaymode(PlayMode.Paused);
-                    break;
-                case PlayMode.Paused:
-                    ResumeTimer();
-                    UpdatePlaymode(PlayMode.Playing);
-                    break;
-                case PlayMode.Edit:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void EnterEditMode() {
+        public void EnterEditMode() {
             taskUIs.ForEach(x => x.EnterEditMode());
         }
-        private void ExitEditMode() {
+        public void ExitEditMode() {
             // TODO Save Changes
             taskUIs.ForEach(x => x.ExitEditMode());
         }
 
-        private void ResumeTimer() {
-            TaskUI currentTask = taskUIs[currentActiveTimer];
+        public void ResumeTimer() {
+            ITaskUI cT = taskUIs[currentActiveTimer];
+            TaskUI currentTask = cT as TaskUI;
             currentTask.TaskTimerComplete += Timer_Ended;
             currentTask.Timer.Start();
             currentTask.Timer.Interval = storedTimerDuration;
         }
 
-        private void ActivatePlayMode() {
+        public void ActivatePlayMode() {
             UpdatePlaymode(PlayMode.Playing);
             StartCurrentTask();
         }
 
-        private void UpdatePlaymode(PlayMode targetPlayMode) {
+        public void UpdatePlaymode(PlayMode targetPlayMode) {
             currentPlayMode = targetPlayMode;
             switch (currentPlayMode) {
                 case PlayMode.Idle:
@@ -199,24 +177,25 @@ namespace RepsAndSets.UI
             }
         }
 
-        private void EndWorkout() {
+        public void EndWorkout() {
             ResetWorkout();
             EndAllTimers();
             UpdatePlaymode(PlayMode.Idle);
         }
 
-        private void EndAllTimers() {
+        public void EndAllTimers() {
             taskUIs.ForEach(x => x.EndTimer());
         }
 
-        private void ResetWorkout() {
+        public void ResetWorkout() {
             EndCurrentTask();
             taskUIs.ForEach(x => x.ResetTimer());
             currentActiveTimer = 0;
         }
 
         private void EndCurrentTask() {
-            TaskUI currentTask = taskUIs[currentActiveTimer];
+            ITaskUI cT = taskUIs[currentActiveTimer];
+            TaskUI currentTask = cT as TaskUI;
             currentTask.TaskTimerComplete -= Timer_Ended;
             currentTask.EndTimer();
         }
@@ -231,14 +210,16 @@ namespace RepsAndSets.UI
             StartCurrentTask();
         }
 
-        private void StartCurrentTask() {
-            TaskUI currentTask = taskUIs[currentActiveTimer];
+        public void StartCurrentTask() {
+            ITaskUI cT = taskUIs[currentActiveTimer];
+            TaskUI currentTask = cT as TaskUI;
             currentTask.StartTimer();
             currentTask.TaskTimerComplete += Timer_Ended;
         }
 
-        private void PauseCurrentTask() {
-            TaskUI currentTask = taskUIs[currentActiveTimer];
+        public void PauseCurrentTask() {
+            ITaskUI cT = taskUIs[currentActiveTimer];
+            TaskUI currentTask = cT as TaskUI;
             storedTimerDuration = currentTask.Timer.Interval;
             currentTask.Timer.Stop();
             currentTask.TaskTimerComplete -= Timer_Ended;
@@ -258,6 +239,33 @@ namespace RepsAndSets.UI
             } else {
                 UpdatePlaymode(PlayMode.Idle);
                 ExitEditMode();
+            }
+        }
+
+        public void RemoveTask(ITaskUI taskUI) {
+            taskUILayoutPanel.Controls.Remove(taskUI.GetUserControl());
+            tasks.Remove(taskUI.GetTaskModel());
+            taskUIs.Remove(taskUI as TaskUI);
+        }
+
+        public void OnClickActionButton() {
+            switch (currentPlayMode) {
+                case PlayMode.Idle:
+                    ActivatePlayMode();
+                    UpdatePlaymode(PlayMode.Playing);
+                    break;
+                case PlayMode.Playing:
+                    PauseCurrentTask();
+                    UpdatePlaymode(PlayMode.Paused);
+                    break;
+                case PlayMode.Paused:
+                    ResumeTimer();
+                    UpdatePlaymode(PlayMode.Playing);
+                    break;
+                case PlayMode.Edit:
+                    break;
+                default:
+                    break;
             }
         }
     }

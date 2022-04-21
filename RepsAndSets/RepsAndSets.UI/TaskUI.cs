@@ -39,7 +39,8 @@ namespace RepsAndSets.UI
             }
             set {
                 _secondsRemaining = value;
-                SetTimerText(_secondsRemaining.ToString());
+                TimeLogic.ConvertToTime(_secondsRemaining, out int minutes, out int seconds);
+                SetTimerText($"{minutes}:{seconds}");
             }
         }
         private int _secondsRemaining;
@@ -100,6 +101,8 @@ namespace RepsAndSets.UI
         }
         public void ExitEditMode() {
             timerTextBox.Hide();
+            timerTextBox.Text.ToTime(out int seconds, out int minutes);
+            SecondsRemaining = TimeLogic.ConvertFromTime(seconds, minutes);
             timerTextLabel.Show();
         }
 
@@ -213,6 +216,14 @@ namespace RepsAndSets.UI
             if (e.KeyCode == Keys.Back && timerTextBox.SelectionStart == 3) {
                 timerTextBox.Select(2, 0);
             }
+        }
+
+        public UserControl GetUserControl() {
+            return this;
+        }
+
+        public TaskModel GetTaskModel() {
+            return TaskModel;
         }
     }
 }

@@ -12,5 +12,31 @@ namespace RepsAndSets.Library
             minutes = (int)(secondsTotal / 60);
             seconds = secondsTotal % 60;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minutes"></param>
+        /// <param name="seconds"></param>
+        /// <returns>Time in seconds</returns>
+        public static int ConvertFromTime(int minutes, int seconds) {
+            return minutes * 60 + seconds;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minutes"></param>
+        /// <param name="seconds"></param>
+        public static void ToTime(this string timeString, out int minutes, out int seconds) {
+            minutes = 0;
+            seconds = 0;
+            if (timeString.Contains(':')) {
+                string[] split = timeString.Split(':');
+                int.TryParse(split[0], out minutes);
+                int.TryParse(split[1], out seconds);
+            } else {
+                int.TryParse(timeString, out minutes);
+            }
+        }
     }
 }
