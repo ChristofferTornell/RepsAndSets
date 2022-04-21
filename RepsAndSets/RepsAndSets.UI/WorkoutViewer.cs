@@ -13,7 +13,7 @@ using RepsAndSets.Library.Models;
 
 namespace RepsAndSets.UI
 {
-    public partial class WorkoutViewer : Form
+    public partial class WorkoutViewer : Form, IWorkoutViewer
     {
         AddNewTaskButton addNewTaskButton;
         List<TaskUI> taskUIs = new List<TaskUI>();
@@ -158,7 +158,7 @@ namespace RepsAndSets.UI
                     EnterEditMode();
                     break;
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
