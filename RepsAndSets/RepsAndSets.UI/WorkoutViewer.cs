@@ -44,6 +44,7 @@ namespace RepsAndSets.UI
                 task.Hide();
             }
             AddNewTask();
+
             // Enable edit mode
 
         }
