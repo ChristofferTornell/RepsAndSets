@@ -38,5 +38,15 @@ namespace RepsAndSets.Library
                 int.TryParse(timeString, out minutes);
             }
         }
+
+        public static string ToTimeString(this int timeMeasurement) {
+            string output;
+            if (timeMeasurement < 10 && timeMeasurement >= 0) {
+                output = $"0{timeMeasurement}";
+            } else {
+                output = timeMeasurement.ToString();
+            }
+            return output;
+        }
     }
 }

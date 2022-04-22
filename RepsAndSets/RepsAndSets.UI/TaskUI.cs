@@ -40,7 +40,7 @@ namespace RepsAndSets.UI
             set {
                 _secondsRemaining = value;
                 TimeLogic.ConvertToTime(_secondsRemaining, out int minutes, out int seconds);
-                SetTimerText($"{minutes}:{seconds}");
+                SetTimerText($"{minutes.ToTimeString()}:{seconds.ToTimeString()}");
             }
         }
         private int _secondsRemaining;
@@ -97,13 +97,19 @@ namespace RepsAndSets.UI
 
         public void EnterEditMode() {
             timerTextLabel.Hide();
+            timerTextBox.Text = timerTextLabel.Text;
             timerTextBox.Show();
         }
         public void ExitEditMode() {
             timerTextBox.Hide();
             timerTextBox.Text.ToTime(out int seconds, out int minutes);
-            SecondsRemaining = TimeLogic.ConvertFromTime(seconds, minutes);
+            UpdateTimerDuration(seconds, minutes);
             timerTextLabel.Show();
+        }
+
+        private void UpdateTimerDuration(int seconds, int minutes) {
+            TaskModel.Duration = TimeLogic.ConvertFromTime(seconds, minutes);
+            SecondsRemaining = TimeLogic.ConvertFromTime(seconds, minutes);
         }
 
         private void timerTextBox_TextChanged(object sender, EventArgs e) {

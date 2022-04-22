@@ -65,5 +65,18 @@ namespace RepsAndSets.Tests
             Assert.Equal(expectedSeconds, seconds);
 
         }
+
+        [Theory]
+        [InlineData(0, "00")]
+        [InlineData(10, "10")]
+        public void ConvertFromTime_ShouldConvertTimeMeasurementToString(int measurement, string expectedString) {
+            // Arrange
+
+            // Act
+            string measurementString = measurement.ToTimeString();
+
+            // Assert
+            Assert.Equal(measurementString, expectedString);
+        }
     }
 }

@@ -57,12 +57,14 @@ namespace RepsAndSets.UI
 
             taskUILayoutPanel.Controls.Add(newTaskUI);
             taskUIs.Add(newTaskUI);
-
-            // Puts the task button back at the bottom of the layout panel
-            if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
-                taskUILayoutPanel.Controls.Remove(addNewTaskButton);
+            if (currentPlayMode == PlayMode.Edit) {
+                newTaskUI.EnterEditMode();
+                // Puts the task button back at the bottom of the layout panel
+                if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
+                    taskUILayoutPanel.Controls.Remove(addNewTaskButton);
+                }
+                taskUILayoutPanel.Controls.Add(addNewTaskButton);
             }
-            taskUILayoutPanel.Controls.Add(addNewTaskButton);
         }
 
         public void RemoveTask(TaskUI taskUI) {
@@ -95,10 +97,14 @@ namespace RepsAndSets.UI
 
         public void EnterEditMode() {
             taskUIs.ForEach(x => x.EnterEditMode());
+            taskUILayoutPanel.Controls.Add(addNewTaskButton);
         }
         public void ExitEditMode() {
             // TODO Save Changes
             taskUIs.ForEach(x => x.ExitEditMode());
+            if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
+                taskUILayoutPanel.Controls.Remove(addNewTaskButton);
+            }
         }
 
         public void ResumeTimer() {
