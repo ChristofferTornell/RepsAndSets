@@ -17,3 +17,5 @@ C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Tests\obj\Debug\
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Tests\obj\Debug\RepsAndSets.Tests.csproj.CopyComplete
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Tests\obj\Debug\RepsAndSets.Tests.dll
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Tests\obj\Debug\RepsAndSets.Tests.pdb
+C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Tests\bin\Debug\Dapper.dll
+C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Tests\bin\Debug\Dapper.xml

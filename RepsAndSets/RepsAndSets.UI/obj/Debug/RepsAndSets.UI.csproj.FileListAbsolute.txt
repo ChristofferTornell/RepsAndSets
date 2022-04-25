@@ -13,3 +13,5 @@ C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.UI\bin\Debug\Rep
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.UI\bin\Debug\RepsAndSets.Library.pdb
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.UI\obj\Debug\RepsAndSets.UI.csproj.CopyComplete
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.UI\obj\Debug\RepsAndSets.UI.AddNewTaskButton.resources
+C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.UI\bin\Debug\Dapper.dll
+C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.UI\bin\Debug\Dapper.xml

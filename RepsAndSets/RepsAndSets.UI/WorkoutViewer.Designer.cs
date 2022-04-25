@@ -27,11 +27,14 @@ namespace RepsAndSets.UI
         /// </summary>
         private void InitializeComponent() {
             this.WorkoutTitleLabel = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.workoutsDropDown = new System.Windows.Forms.ComboBox();
             this.editButton = new System.Windows.Forms.Button();
             this.taskUILayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.ActionButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
+            this.workoutTitleTextBox = new System.Windows.Forms.RichTextBox();
+            this.addNewWorkout = new System.Windows.Forms.Button();
+            this.deleteWorkoutButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // WorkoutTitleLabel
@@ -42,15 +45,14 @@ namespace RepsAndSets.UI
             this.WorkoutTitleLabel.Size = new System.Drawing.Size(53, 13);
             this.WorkoutTitleLabel.TabIndex = 0;
             this.WorkoutTitleLabel.Text = "Workout";
-            this.WorkoutTitleLabel.Click += new System.EventHandler(this.label1_Click);
             // 
-            // comboBox1
+            // workoutsDropDown
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(457, 27);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 1;
+            this.workoutsDropDown.FormattingEnabled = true;
+            this.workoutsDropDown.Location = new System.Drawing.Point(457, 27);
+            this.workoutsDropDown.Name = "workoutsDropDown";
+            this.workoutsDropDown.Size = new System.Drawing.Size(121, 21);
+            this.workoutsDropDown.TabIndex = 1;
             // 
             // editButton
             // 
@@ -93,23 +95,56 @@ namespace RepsAndSets.UI
             this.ResetButton.UseVisualStyleBackColor = true;
             this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
             // 
+            // workoutTitleTextBox
+            // 
+            this.workoutTitleTextBox.Location = new System.Drawing.Point(90, 27);
+            this.workoutTitleTextBox.Name = "workoutTitleTextBox";
+            this.workoutTitleTextBox.Size = new System.Drawing.Size(171, 18);
+            this.workoutTitleTextBox.TabIndex = 7;
+            this.workoutTitleTextBox.Text = "";
+            this.workoutTitleTextBox.Visible = false;
+            // 
+            // addNewWorkout
+            // 
+            this.addNewWorkout.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.addNewWorkout.Location = new System.Drawing.Point(457, 58);
+            this.addNewWorkout.Name = "addNewWorkout";
+            this.addNewWorkout.Size = new System.Drawing.Size(59, 23);
+            this.addNewWorkout.TabIndex = 8;
+            this.addNewWorkout.Text = "NEW";
+            this.addNewWorkout.UseVisualStyleBackColor = true;
+            this.addNewWorkout.Click += new System.EventHandler(this.addNewWorkout_Click);
+            // 
+            // deleteWorkoutButton
+            // 
+            this.deleteWorkoutButton.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.deleteWorkoutButton.Location = new System.Drawing.Point(522, 58);
+            this.deleteWorkoutButton.Name = "deleteWorkoutButton";
+            this.deleteWorkoutButton.Size = new System.Drawing.Size(56, 23);
+            this.deleteWorkoutButton.TabIndex = 9;
+            this.deleteWorkoutButton.Text = "DELETE";
+            this.deleteWorkoutButton.UseVisualStyleBackColor = true;
+            this.deleteWorkoutButton.Click += new System.EventHandler(this.deleteWorkoutButton_Click);
+            // 
             // WorkoutViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.deleteWorkoutButton);
+            this.Controls.Add(this.addNewWorkout);
+            this.Controls.Add(this.workoutTitleTextBox);
             this.Controls.Add(this.ResetButton);
             this.Controls.Add(this.ActionButton);
             this.Controls.Add(this.taskUILayoutPanel);
             this.Controls.Add(this.editButton);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.workoutsDropDown);
             this.Controls.Add(this.WorkoutTitleLabel);
             this.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.Control;
             this.Name = "WorkoutViewer";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.WorkoutViewer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,11 +153,14 @@ namespace RepsAndSets.UI
         #endregion
 
         private System.Windows.Forms.Label WorkoutTitleLabel;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox workoutsDropDown;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.FlowLayoutPanel taskUILayoutPanel;
         private System.Windows.Forms.Button ActionButton;
         private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.RichTextBox workoutTitleTextBox;
+        private System.Windows.Forms.Button addNewWorkout;
+        private System.Windows.Forms.Button deleteWorkoutButton;
     }
 }
 

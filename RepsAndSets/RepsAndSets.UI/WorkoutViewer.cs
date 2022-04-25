@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,10 +17,7 @@ namespace RepsAndSets.UI
     {
         AddNewTaskButton addNewTaskButton;
         List<TaskUI> taskUIs = new List<TaskUI>();
-        List<TaskModel> tasks = new List<TaskModel>();
-        int currentActiveTimer;
 
-        PlayMode currentPlayMode;
         int storedTimerDuration;
 
         delegate void SetTextCallback(string text);
@@ -33,33 +30,47 @@ namespace RepsAndSets.UI
                 WorkoutViewer = this
             };
 
-            if (WorkoutsExists()) {
-                DrawWorkout(null);
-            } else {
-                DrawNewWorkout();
-            }
+            //TODO LOGIN LOGIC
+
+            UpdateWorkoutDropDown();
+
+            WorkoutLogic.InitializeWorkoutScreen();
+
         }
-        private void DrawNewWorkout() {
+
+        public void HandleNoWorkoutExists() {
+            WorkoutLogic.DrawNewWorkout();
+        }
+
+        public void DrawWorkout(WorkoutModel workout) {
             foreach (TaskUI task in taskUIs) {
                 task.Hide();
             }
-            AddNewTask();
+            for (int i = 0; i < workout.Tasks.Count; i++) {
+                TaskModel task = workout.Tasks[i];
+                TaskUI taskUI = taskUIs[i];
 
-            // TODO - Enable edit mode here
-
+                taskUI.SetTaskModel(task);
+                taskUI.Show();
+            }
+            WorkoutTitleLabel.Text = workout.Title;
         }
 
-        public void AddNewTask() {
-            TaskModel newTaskModel = new TaskModel();
-            tasks.Add(newTaskModel);
+        public void UpdateWorkoutDropDown() {
+            workoutsDropDown.DataSource = null;
+            workoutsDropDown.DataSource = GlobalConfig.LoggedInUser.Workouts;
+            workoutsDropDown.DisplayMember = "Title";
+        }
 
-            TaskUI newTaskUI = new TaskUI(TaskModelDefaults.TaskName + tasks.Count, this, newTaskModel);
-
+        public void AddNewTask(TaskModel newTaskModel) {
+            TaskUI newTaskUI = new TaskUI(TaskModelDefaults.TaskName + WorkoutLogic.CurrentTasks.Count, this, newTaskModel);
             taskUILayoutPanel.Controls.Add(newTaskUI);
             taskUIs.Add(newTaskUI);
-            if (currentPlayMode == PlayMode.Edit) {
+            if (WorkoutLogic.CurrentPlayMode == PlayMode.Edit) {
                 newTaskUI.EnterEditMode();
+
                 // Puts the task button back at the bottom of the layout panel
+
                 if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
                     taskUILayoutPanel.Controls.Remove(addNewTaskButton);
                 }
@@ -67,40 +78,34 @@ namespace RepsAndSets.UI
             }
         }
 
-        public void RemoveTask(TaskUI taskUI) {
-
-
-        }
-
-        private bool WorkoutsExists() {
-            return false;
-        }
-
-        private void WorkoutViewer_Load(object sender, EventArgs e) {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e) {
-
-        }
-
-        private void taskUI1_Load(object sender, EventArgs e) {
-
-        }
-        private void DrawWorkout(WorkoutModel workout) { 
-        
-        }
-
         private void ActionButton_Click(object sender, EventArgs e) {
             OnClickActionButton();
         }
 
         public void EnterEditMode() {
+            ShowActionButton(false);
+            SetEditButtonText("Exit Edit Mode"); // TODO add save changes button
+            SetActionButtonText("RESUME");
+
+            // Toggles workout title
+            WorkoutTitleLabel.Hide();
+            workoutTitleTextBox.Text = WorkoutTitleLabel.Text;
+            workoutTitleTextBox.Show();
+
             taskUIs.ForEach(x => x.EnterEditMode());
             taskUILayoutPanel.Controls.Add(addNewTaskButton);
         }
         public void ExitEditMode() {
-            // TODO Save Changes
+
+            // Toggles workout title
+            workoutTitleTextBox.Hide();
+            WorkoutLogic.CurrentWorkout.Title = workoutTitleTextBox.Text;
+            SetWorkoutTitleText(WorkoutLogic.CurrentWorkout.Title);
+            WorkoutTitleLabel.Show();
+
+            UpdateWorkoutDropDown();
+            WorkoutLogic.SaveExistingWorkout(WorkoutLogic.CurrentWorkout);
+
             taskUIs.ForEach(x => x.ExitEditMode());
             if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
                 taskUILayoutPanel.Controls.Remove(addNewTaskButton);
@@ -108,21 +113,114 @@ namespace RepsAndSets.UI
         }
 
         public void ResumeTimer() {
-            ITaskUI cT = taskUIs[currentActiveTimer];
-            TaskUI currentTask = cT as TaskUI;
+            TaskUI currentTask = taskUIs[WorkoutLogic.currentActiveTimer];
             currentTask.TaskTimerComplete += Timer_Ended;
             currentTask.Timer.Start();
             currentTask.Timer.Interval = storedTimerDuration;
         }
 
-        public void ActivatePlayMode() {
-            UpdatePlaymode(PlayMode.Playing);
-            StartCurrentTask();
+        private void ShowActionButton(bool shouldShow) {
+            if (this.ActionButton.InvokeRequired) {
+                SetBooleanCallback d = new SetBooleanCallback(ShowActionButton);
+                this.Invoke(d, new object[] { shouldShow });
+            } else {
+                if (shouldShow) {
+                    ActionButton.Show();
+                } else {
+                    ActionButton.Hide();
+                }
+            }
         }
 
-        public void UpdatePlaymode(PlayMode targetPlayMode) {
-            currentPlayMode = targetPlayMode;
-            switch (currentPlayMode) {
+        public void EndAllTimers() {
+            taskUIs.ForEach(x => x.EndTimer());
+        }
+
+        public void ResetWorkout() {
+            EndCurrentTask();
+            taskUIs.ForEach(x => x.ResetTimer());
+            WorkoutLogic.currentActiveTimer = 0;
+        }
+
+        public void EndCurrentTask() {
+            TaskUI currentTask = taskUIs[WorkoutLogic.currentActiveTimer];
+            currentTask.TaskTimerComplete -= Timer_Ended;
+            currentTask.EndTimer();
+        }
+
+        private void Timer_Ended(object sender, EventArgs e) {
+            WorkoutLogic.OnCurrentTaskTimerEnded();
+
+        }
+
+        public void StartCurrentTask() {
+            TaskUI currentTask = taskUIs[WorkoutLogic.currentActiveTimer];
+            currentTask.StartTimer();
+            currentTask.TaskTimerComplete += Timer_Ended;
+        }
+
+        public void PauseCurrentTask() {
+            TaskUI currentTask = taskUIs[WorkoutLogic.currentActiveTimer];
+            storedTimerDuration = currentTask.Timer.Interval;
+            currentTask.Timer.Stop();
+            currentTask.TaskTimerComplete -= Timer_Ended;
+        }
+
+        private void ResetButton_Click(object sender, EventArgs e) {
+            WorkoutLogic.OnRestartButtonClick();
+        }
+
+        private void editButton_Click(object sender, EventArgs e) {
+            WorkoutLogic.OnEditButtonClick();
+        }
+
+        public void RemoveTask(TaskModel task) {
+            TaskUI taskUI = taskUIs[task.OrderIndex];
+            taskUILayoutPanel.Controls.Remove(taskUI.GetUserControl());
+            taskUIs.Remove(taskUI);
+        }
+
+        public void OnClickActionButton() {
+            WorkoutLogic.OnClickActionButton();
+        }
+
+        private void addNewWorkout_Click(object sender, EventArgs e) {
+            WorkoutLogic.OnClick_AddNewWorkoutButton(WorkoutLogic.CurrentWorkout);
+
+        }
+        private void SetActionButtonText(string text) {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.ActionButton.InvokeRequired) {
+                SetTextCallback d = new SetTextCallback(SetActionButtonText);
+                this.Invoke(d, new object[] { text });
+            } else {
+                this.ActionButton.Text = text;
+            }
+        }
+        private void SetWorkoutTitleText(string text) {
+            if (this.WorkoutTitleLabel.InvokeRequired) {
+                SetTextCallback d = new SetTextCallback(SetWorkoutTitleText);
+                this.Invoke(d, new object[] { text });
+            } else {
+                this.WorkoutTitleLabel.Text = text;
+            }
+        }
+        private void SetEditButtonText(string text) {
+            if (this.editButton.InvokeRequired) {
+                SetTextCallback d = new SetTextCallback(SetEditButtonText);
+                this.Invoke(d, new object[] { text });
+            } else {
+                this.editButton.Text = text;
+            }
+        }
+
+        private void deleteWorkoutButton_Click(object sender, EventArgs e) {
+            WorkoutLogic.DeleteWorkout(WorkoutLogic.CurrentWorkout);
+        }
+        public void UpdatePlaymode(PlayMode currentPlaymode) {
+            switch (currentPlaymode) {
                 case PlayMode.Idle:
                     SetEditButtonText("Edit");
                     SetActionButtonText("PLAY");
@@ -137,141 +235,10 @@ namespace RepsAndSets.UI
                     ShowActionButton(true);
                     break;
                 case PlayMode.Edit:
-                    ShowActionButton(false);
-                    SetEditButtonText("Exit Edit Mode"); // TODO add save changes button
-                    SetActionButtonText("RESUME");
                     EnterEditMode();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void SetActionButtonText(string text) {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.ActionButton.InvokeRequired) {
-                SetTextCallback d = new SetTextCallback(SetActionButtonText);
-                this.Invoke(d, new object[] { text });
-            } else {
-                this.ActionButton.Text = text;
-            }
-        }
-        private void SetEditButtonText(string text) {
-            if (this.editButton.InvokeRequired) {
-                SetTextCallback d = new SetTextCallback(SetEditButtonText);
-                this.Invoke(d, new object[] { text });
-            } else {
-                this.editButton.Text = text;
-            }
-        }
-
-        private void ShowActionButton(bool shouldShow) {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.ActionButton.InvokeRequired) {
-                SetBooleanCallback d = new SetBooleanCallback(ShowActionButton);
-                this.Invoke(d, new object[] { shouldShow });
-            } else {
-                if (shouldShow) {
-                    ActionButton.Show();
-                } else {
-                    ActionButton.Hide();
-                }
-            }
-        }
-
-        public void EndWorkout() {
-            ResetWorkout();
-            EndAllTimers();
-            UpdatePlaymode(PlayMode.Idle);
-        }
-
-        public void EndAllTimers() {
-            taskUIs.ForEach(x => x.EndTimer());
-        }
-
-        public void ResetWorkout() {
-            EndCurrentTask();
-            taskUIs.ForEach(x => x.ResetTimer());
-            currentActiveTimer = 0;
-        }
-
-        private void EndCurrentTask() {
-            ITaskUI cT = taskUIs[currentActiveTimer];
-            TaskUI currentTask = cT as TaskUI;
-            currentTask.TaskTimerComplete -= Timer_Ended;
-            currentTask.EndTimer();
-        }
-
-        private void Timer_Ended(object sender, EventArgs e) {
-            EndCurrentTask();
-            if (currentActiveTimer+1 >= tasks.Count) {
-                EndWorkout();
-                return;
-            }
-            currentActiveTimer++;
-            StartCurrentTask();
-        }
-
-        public void StartCurrentTask() {
-            ITaskUI cT = taskUIs[currentActiveTimer];
-            TaskUI currentTask = cT as TaskUI;
-            currentTask.StartTimer();
-            currentTask.TaskTimerComplete += Timer_Ended;
-        }
-
-        public void PauseCurrentTask() {
-            ITaskUI cT = taskUIs[currentActiveTimer];
-            TaskUI currentTask = cT as TaskUI;
-            storedTimerDuration = currentTask.Timer.Interval;
-            currentTask.Timer.Stop();
-            currentTask.TaskTimerComplete -= Timer_Ended;
-        }
-
-        private void ResetButton_Click(object sender, EventArgs e) {
-            ResetWorkout();
-            if (currentPlayMode == PlayMode.Playing) {
-                StartCurrentTask();
-            }
-        }
-
-        private void editButton_Click(object sender, EventArgs e) {
-            if (currentPlayMode != PlayMode.Edit) {
-                ResetWorkout();
-                UpdatePlaymode(PlayMode.Edit);
-            } else {
-                UpdatePlaymode(PlayMode.Idle);
-                ExitEditMode();
-            }
-        }
-
-        public void RemoveTask(ITaskUI taskUI) {
-            taskUILayoutPanel.Controls.Remove(taskUI.GetUserControl());
-            tasks.Remove(taskUI.GetTaskModel());
-            taskUIs.Remove(taskUI as TaskUI);
-        }
-
-        public void OnClickActionButton() {
-            switch (currentPlayMode) {
-                case PlayMode.Idle:
-                    ActivatePlayMode();
-                    UpdatePlaymode(PlayMode.Playing);
-                    break;
-                case PlayMode.Playing:
-                    PauseCurrentTask();
-                    UpdatePlaymode(PlayMode.Paused);
-                    break;
-                case PlayMode.Paused:
-                    ResumeTimer();
-                    UpdatePlaymode(PlayMode.Playing);
-                    break;
-                case PlayMode.Edit:
-                    break;
-                default:
-                    break;
             }
         }
     }

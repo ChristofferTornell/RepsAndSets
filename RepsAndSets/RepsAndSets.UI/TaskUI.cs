@@ -84,7 +84,7 @@ namespace RepsAndSets.UI
             SecondsRemaining = TaskModel.Duration;
         }
         private void DeleteTaskButton_Click(object sender, EventArgs e) {
-            WorkoutViewer.RemoveTask(this);
+            WorkoutLogic.RemoveTask(TaskModel);
         }
 
         private void TimeRemainingLabel_Click(object sender, EventArgs e) {
@@ -230,6 +230,9 @@ namespace RepsAndSets.UI
 
         public TaskModel GetTaskModel() {
             return TaskModel;
+        }
+        public void SetTaskModel(TaskModel taskModel) {
+            TaskModel = taskModel;
         }
     }
 }

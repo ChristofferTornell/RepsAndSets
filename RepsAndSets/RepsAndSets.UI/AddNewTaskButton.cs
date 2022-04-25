@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RepsAndSets.Library;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,7 +19,7 @@ namespace RepsAndSets.UI
         }
 
         private void NewTaskButton_Click(object sender, EventArgs e) {
-            WorkoutViewer.AddNewTask();
+            WorkoutLogic.OnClick_AddNewTaskButton();
         }
     }
 }

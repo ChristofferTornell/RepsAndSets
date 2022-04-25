@@ -14,5 +14,11 @@ namespace RepsAndSets.Library
             }
             return false;
         }
+        public static T LastElement<T>(this List<T> list) {
+            if (list.Count <= 0) {
+                return default;
+            }
+            return list[list.Count - 1];
+        }
     }
 }

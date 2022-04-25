@@ -8,10 +8,10 @@ namespace RepsAndSets.Library.Models
 {
     public class WorkoutModel
     {
-        string _title { get; set; }
-        int _id { get; set; }
+        public string Title { get; set; }
+        public int Id { get; set; }
 
-        List<TaskModel> tasks;
+        public List<TaskModel> Tasks = new List<TaskModel>();
         
         /// <summary>
         /// 

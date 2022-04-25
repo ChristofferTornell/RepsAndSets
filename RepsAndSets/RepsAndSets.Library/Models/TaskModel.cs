@@ -9,7 +9,11 @@ namespace RepsAndSets.Library.Models
 {
     public class TaskModel
     {
+        public int Id { get; set; }
+        public int OrderIndex { get; set; }
         public string Title { get; set; }
+        public int[] Color = new int[3];
+        public int SongId;
         
         /// <summary>
         /// The base duration of the timer in seconds.
