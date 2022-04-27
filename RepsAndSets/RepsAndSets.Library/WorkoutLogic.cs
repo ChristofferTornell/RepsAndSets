@@ -34,6 +34,7 @@ namespace RepsAndSets.Library
         public static void AddAndSaveNewTask() {
             TaskModel newTaskModel = new TaskModel();
             CurrentTasks.Add(newTaskModel);
+            newTaskModel.Title = TaskModelDefaults.TaskName + CurrentTasks.IndexOf(newTaskModel);
 
             GlobalConfig.WorkoutViewer.AddNewTask(newTaskModel);
             newTaskModel.OrderIndex = CurrentTasks.IndexOf(newTaskModel);
@@ -54,14 +55,6 @@ namespace RepsAndSets.Library
         public static void SaveNewWorkout(WorkoutModel newWorkout) {
             GlobalConfig.Connector.Workout_Insert(newWorkout, GlobalConfig.LoggedInUser);
             GlobalConfig.LoggedInUser.Workouts.Add(newWorkout);
-        }
-
-        public static void InitializeWorkoutScreen() {
-            if (Workouts.Count > 0) {
-                GlobalConfig.WorkoutViewer.DrawWorkout(Workouts[0]);
-            } else {
-                GlobalConfig.WorkoutViewer.HandleNoWorkoutExists();
-            }
         }
 
         public static void SaveExistingWorkout(WorkoutModel existingWorkout) {
@@ -131,7 +124,7 @@ namespace RepsAndSets.Library
             GlobalConfig.WorkoutViewer.EndAllTimers();
             UpdatePlaymode(PlayMode.Idle);
         }
-        public static void DrawWorkout(WorkoutModel workout) {
+        public static void RequestDrawWorkout(WorkoutModel workout) {
             CurrentTasks = new List<TaskModel>();
             CurrentWorkout = workout;
             GlobalConfig.WorkoutViewer.DrawWorkout(workout);
@@ -139,9 +132,9 @@ namespace RepsAndSets.Library
         }
         public static void DrawNewWorkout() {
             WorkoutModel newWorkout = new WorkoutModel() { Title = WorkoutModelDefaults.WorkoutName };
-            DrawWorkout(newWorkout);
-            AddAndSaveNewTask();
+            RequestDrawWorkout(newWorkout);
             SaveNewWorkout(newWorkout);
+            AddAndSaveNewTask();
             GlobalConfig.WorkoutViewer.UpdateWorkoutDropDown();
             UpdatePlaymode(PlayMode.Edit);
         }

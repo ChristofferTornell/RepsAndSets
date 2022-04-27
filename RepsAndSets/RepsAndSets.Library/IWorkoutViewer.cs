@@ -23,6 +23,7 @@ namespace RepsAndSets.Library
         void EndCurrentTask();
         void DrawWorkout(WorkoutModel workoutModel);
         void HandleNoWorkoutExists();
+        void Initialize();
         void UpdateWorkoutDropDown();
     }
 }

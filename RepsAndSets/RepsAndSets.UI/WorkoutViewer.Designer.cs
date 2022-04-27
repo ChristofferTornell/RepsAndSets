@@ -53,6 +53,7 @@ namespace RepsAndSets.UI
             this.workoutsDropDown.Name = "workoutsDropDown";
             this.workoutsDropDown.Size = new System.Drawing.Size(121, 21);
             this.workoutsDropDown.TabIndex = 1;
+            this.workoutsDropDown.SelectedIndexChanged += new System.EventHandler(this.workoutsDropDown_SelectedIndexChanged);
             // 
             // editButton
             // 

@@ -25,7 +25,9 @@ namespace RepsAndSets.UI
 
         public WorkoutViewer() {
             InitializeComponent();
+        }
 
+        public void Initialize() {
             addNewTaskButton = new AddNewTaskButton() {
                 WorkoutViewer = this
             };
@@ -34,8 +36,11 @@ namespace RepsAndSets.UI
 
             UpdateWorkoutDropDown();
 
-            WorkoutLogic.InitializeWorkoutScreen();
-
+            if (WorkoutLogic.Workouts.Count > 0) {
+                WorkoutLogic.RequestDrawWorkout(WorkoutLogic.Workouts[0]);
+            } else {
+                HandleNoWorkoutExists();
+            }
         }
 
         public void HandleNoWorkoutExists() {
@@ -43,17 +48,21 @@ namespace RepsAndSets.UI
         }
 
         public void DrawWorkout(WorkoutModel workout) {
-            foreach (TaskUI task in taskUIs) {
-                task.Hide();
-            }
+            taskUIs.Clear();
+            taskUILayoutPanel.Controls.Clear();
             for (int i = 0; i < workout.Tasks.Count; i++) {
                 TaskModel task = workout.Tasks[i];
-                TaskUI taskUI = taskUIs[i];
-
-                taskUI.SetTaskModel(task);
-                taskUI.Show();
+                AddTaskUI(task);
             }
+            PutNewTaskButtonAtBottom();
             WorkoutTitleLabel.Text = workout.Title;
+        }
+
+        private TaskUI AddTaskUI(TaskModel task) {
+            TaskUI newTaskUI = new TaskUI(task.Title, this, task);
+            taskUIs.Add(newTaskUI);
+            taskUILayoutPanel.Controls.Add(newTaskUI);
+            return newTaskUI;
         }
 
         public void UpdateWorkoutDropDown() {
@@ -63,19 +72,20 @@ namespace RepsAndSets.UI
         }
 
         public void AddNewTask(TaskModel newTaskModel) {
-            TaskUI newTaskUI = new TaskUI(TaskModelDefaults.TaskName + WorkoutLogic.CurrentTasks.Count, this, newTaskModel);
-            taskUILayoutPanel.Controls.Add(newTaskUI);
-            taskUIs.Add(newTaskUI);
+            TaskUI newTaskUI = AddTaskUI(newTaskModel);
             if (WorkoutLogic.CurrentPlayMode == PlayMode.Edit) {
                 newTaskUI.EnterEditMode();
 
-                // Puts the task button back at the bottom of the layout panel
-
-                if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
-                    taskUILayoutPanel.Controls.Remove(addNewTaskButton);
-                }
-                taskUILayoutPanel.Controls.Add(addNewTaskButton);
+                PutNewTaskButtonAtBottom();
             }
+        }
+
+        private void PutNewTaskButtonAtBottom() {
+            // Puts the task button back at the bottom of the layout panel
+            if (taskUILayoutPanel.Controls.Contains(addNewTaskButton)) {
+                taskUILayoutPanel.Controls.Remove(addNewTaskButton);
+            }
+            taskUILayoutPanel.Controls.Add(addNewTaskButton);
         }
 
         private void ActionButton_Click(object sender, EventArgs e) {
@@ -218,6 +228,7 @@ namespace RepsAndSets.UI
 
         private void deleteWorkoutButton_Click(object sender, EventArgs e) {
             WorkoutLogic.DeleteWorkout(WorkoutLogic.CurrentWorkout);
+            UpdateWorkoutDropDown();
         }
         public void UpdatePlaymode(PlayMode currentPlaymode) {
             switch (currentPlaymode) {
@@ -240,6 +251,10 @@ namespace RepsAndSets.UI
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void workoutsDropDown_SelectedIndexChanged(object sender, EventArgs e) {
+            DrawWorkout(WorkoutLogic.Workouts[workoutsDropDown.SelectedIndex]);
         }
     }
 }

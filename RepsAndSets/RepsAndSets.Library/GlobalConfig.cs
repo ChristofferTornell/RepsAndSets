@@ -20,6 +20,7 @@ namespace RepsAndSets.Library
         }
         public static void InitializeWorkoutViewer(IWorkoutViewer workoutViewer) {
             WorkoutViewer = workoutViewer;
+            WorkoutViewer.Initialize();
         }
         public static string ConnectionString(string name) {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;

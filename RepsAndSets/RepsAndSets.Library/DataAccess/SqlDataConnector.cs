@@ -16,7 +16,7 @@ namespace RepsAndSets.Library.DataAccess
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectionString("RepsAndSets"))) {
                 var p = new DynamicParameters();
                 p.Add("@WorkoutId", workoutId);
-                output = connection.Query<TaskModel>("dbo.spTasks_GetByWorkoutId", p, commandType: CommandType.StoredProcedure).ToList();
+                output = connection.Query<TaskModel>("dbo.spTasks_GetByWorkout", p, commandType: CommandType.StoredProcedure).ToList();
             }
             return output;
         }
@@ -124,7 +124,12 @@ namespace RepsAndSets.Library.DataAccess
         }
 
         public void Tasks_RemoveByWorkout(int id) {
-            throw new NotImplementedException(); // TODO Implement in sql
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnectionString("RepsAndSets"))) {
+                var p = new DynamicParameters();
+                p.Add("@WorkoutId", id);
+
+                connection.Execute("dbo.spTasks_RemoveByWorkout", p, commandType: CommandType.StoredProcedure);
+            }
         }
     }
 }
