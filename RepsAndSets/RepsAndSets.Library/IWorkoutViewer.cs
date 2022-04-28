@@ -25,5 +25,6 @@ namespace RepsAndSets.Library
         void HandleNoWorkoutExists();
         void Initialize();
         void UpdateWorkoutDropDown();
+        void WorkoutsDropDownSelect(int selectIndex);
     }
 }

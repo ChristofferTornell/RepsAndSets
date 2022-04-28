@@ -47,7 +47,7 @@ namespace RepsAndSets.Library
             GlobalConfig.Connector.Workouts_RemoveById(currentWorkout.Id);
             Workouts.Remove(currentWorkout);
             if (Workouts.Count > 0) {
-                GlobalConfig.WorkoutViewer.DrawWorkout(Workouts.LastElement());
+                GlobalConfig.WorkoutViewer.WorkoutsDropDownSelect(Workouts.Count-1);
             } else {
                 GlobalConfig.WorkoutViewer.HandleNoWorkoutExists();
             }
@@ -132,10 +132,10 @@ namespace RepsAndSets.Library
         }
         public static void DrawNewWorkout() {
             WorkoutModel newWorkout = new WorkoutModel() { Title = WorkoutModelDefaults.WorkoutName };
-            RequestDrawWorkout(newWorkout);
             SaveNewWorkout(newWorkout);
-            AddAndSaveNewTask();
             GlobalConfig.WorkoutViewer.UpdateWorkoutDropDown();
+            GlobalConfig.WorkoutViewer.WorkoutsDropDownSelect(Workouts.IndexOf(newWorkout));
+            AddAndSaveNewTask();
             UpdatePlaymode(PlayMode.Edit);
         }
 

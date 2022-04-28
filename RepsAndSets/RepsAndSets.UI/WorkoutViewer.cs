@@ -43,19 +43,37 @@ namespace RepsAndSets.UI
             }
         }
 
+        private void ResetButton_Click(object sender, EventArgs e) {
+            WorkoutLogic.OnRestartButtonClick();
+        }
+
+        private void editButton_Click(object sender, EventArgs e) {
+            WorkoutLogic.OnEditButtonClick();
+        }
+
+
         public void HandleNoWorkoutExists() {
             WorkoutLogic.DrawNewWorkout();
         }
 
+        /// <summary>
+        /// Draws the input workout on the screen. NOTE! Should only be called via Worklogic.RequestDrawWorkout.
+        /// </summary>
+        /// <param name="workout"></param>
         public void DrawWorkout(WorkoutModel workout) {
             taskUIs.Clear();
             taskUILayoutPanel.Controls.Clear();
+            taskUILayoutPanel.Hide();
+            taskUILayoutPanel.Show();
             for (int i = 0; i < workout.Tasks.Count; i++) {
                 TaskModel task = workout.Tasks[i];
                 AddTaskUI(task);
             }
-            PutNewTaskButtonAtBottom();
+            if (WorkoutLogic.CurrentPlayMode == PlayMode.Edit) {
+                PutNewTaskButtonAtBottom();
+            }
             WorkoutTitleLabel.Text = workout.Title;
+            workoutTitleTextBox.Text = workout.Title;
         }
 
         private TaskUI AddTaskUI(TaskModel task) {
@@ -176,14 +194,6 @@ namespace RepsAndSets.UI
             currentTask.TaskTimerComplete -= Timer_Ended;
         }
 
-        private void ResetButton_Click(object sender, EventArgs e) {
-            WorkoutLogic.OnRestartButtonClick();
-        }
-
-        private void editButton_Click(object sender, EventArgs e) {
-            WorkoutLogic.OnEditButtonClick();
-        }
-
         public void RemoveTask(TaskModel task) {
             TaskUI taskUI = taskUIs[task.OrderIndex];
             taskUILayoutPanel.Controls.Remove(taskUI.GetUserControl());
@@ -254,7 +264,16 @@ namespace RepsAndSets.UI
         }
 
         private void workoutsDropDown_SelectedIndexChanged(object sender, EventArgs e) {
-            DrawWorkout(WorkoutLogic.Workouts[workoutsDropDown.SelectedIndex]);
+            if (workoutsDropDown.SelectedIndex == -1) {
+                return;
+            }
+            WorkoutLogic.RequestDrawWorkout(WorkoutLogic.Workouts[workoutsDropDown.SelectedIndex]);
+        }
+        public void WorkoutsDropDownSelect(int selectIndex) {
+            workoutsDropDown.SelectedIndex = selectIndex;
+            // This will in turn call the workoutsDropDown_SelectedIndexChanged method,
+            // requesting to draw the layout at the selected index
+
         }
     }
 }
