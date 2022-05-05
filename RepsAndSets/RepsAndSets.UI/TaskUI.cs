@@ -114,7 +114,7 @@ namespace RepsAndSets.UI
 
         private void timerTextBox_TextChanged(object sender, EventArgs e) {
             // Adds colon if minute is complete and moves cursor ahead of colon
-            if (MinuteTextComplete()) {
+            if (IsMinuteTextComplete()) {
                 bool moveSelectionAfterSeparator = false;
                 if (!timerTextBox.Text.Contains(':')) {
                     timerTextBox.Text += ':';
@@ -152,7 +152,7 @@ namespace RepsAndSets.UI
             }
         }
 
-        private bool MinuteTextComplete() {
+        private bool IsMinuteTextComplete() {
             bool output = false;
             if (timerTextBox.Text.Contains(':')) {
                 string[] split = timerTextBox.Text.Split(':');
@@ -222,10 +222,6 @@ namespace RepsAndSets.UI
             if (e.KeyCode == Keys.Back && timerTextBox.SelectionStart == 3) {
                 timerTextBox.Select(2, 0);
             }
-        }
-
-        public UserControl GetUserControl() {
-            return this;
         }
 
         public TaskModel GetTaskModel() {

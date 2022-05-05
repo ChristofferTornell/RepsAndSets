@@ -23,6 +23,7 @@ namespace RepsAndSets.Library
             WorkoutViewer.Initialize();
         }
         public static string ConnectionString(string name) {
+            //return "";
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
     }

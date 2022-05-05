@@ -63,6 +63,15 @@
           "buildTransitive/Xamarin.Forms.props": {},
           "buildTransitive/Xamarin.Forms.targets": {}
         }
+      },
+      "RepsAndSets.Library/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/RepsAndSets.Library.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RepsAndSets.Library.dll": {}
+        }
       }
     }
   },
@@ -621,11 +630,17 @@
         "xamarin.forms.4.8.0.1451.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
+    },
+    "RepsAndSets.Library/1.0.0": {
+      "type": "project",
+      "path": "../../RepsAndSets.Library/RepsAndSets.Library.csproj",
+      "msbuildProject": "../../RepsAndSets.Library/RepsAndSets.Library.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
       "NETStandard.Library >= 2.0.3",
+      "RepsAndSets.Library >= 1.0.0",
       "Xamarin.Essentials >= 1.5.3.2",
       "Xamarin.Forms >= 4.8.0.1451"
     ]
@@ -661,7 +676,11 @@
       "frameworks": {
         "netstandard2.0": {
           "targetAlias": "netstandard2.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj": {
+              "projectPath": "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

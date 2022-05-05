@@ -4,6 +4,16 @@
     "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Mobile\\RepsAndSets.Mobile.iOS\\RepsAndSets.Mobile.iOS.csproj": {}
   },
   "projects": {
+    "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj",
+        "projectName": "RepsAndSets.Library",
+        "projectPath": "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj"
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
     "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Mobile\\RepsAndSets.Mobile.iOS\\RepsAndSets.Mobile.iOS.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -92,7 +102,11 @@
         "frameworks": {
           "netstandard2.0": {
             "targetAlias": "netstandard2.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj": {
+                "projectPath": "C:\\Users\\chris\\source\\repos\\RepsAndSets\\RepsAndSets\\RepsAndSets.Library\\RepsAndSets.Library.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

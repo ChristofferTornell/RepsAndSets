@@ -196,7 +196,7 @@ namespace RepsAndSets.UI
 
         public void RemoveTask(TaskModel task) {
             TaskUI taskUI = taskUIs[task.OrderIndex];
-            taskUILayoutPanel.Controls.Remove(taskUI.GetUserControl());
+            taskUILayoutPanel.Controls.Remove(taskUI);
             taskUIs.Remove(taskUI);
         }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using RepsAndSets.Library.Models;
 
 namespace RepsAndSets.Library
@@ -15,7 +14,6 @@ namespace RepsAndSets.Library
         void EndTimer();
         void EnterEditMode();
         void ExitEditMode();
-        UserControl GetUserControl();
         TaskModel GetTaskModel();
     }
 }

@@ -1,9 +1,9 @@
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\bin\Debug\RepsAndSets.Library.dll
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\bin\Debug\RepsAndSets.Library.pdb
-C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\obj\Debug\RepsAndSets.Library.csprojAssemblyReference.cache
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\obj\Debug\RepsAndSets.Library.csproj.CoreCompileInputs.cache
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\obj\Debug\RepsAndSets.Library.dll
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\obj\Debug\RepsAndSets.Library.pdb
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\bin\Debug\Dapper.dll
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\bin\Debug\Dapper.xml
 C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\obj\Debug\RepsAndSets.Library.csproj.CopyComplete
+C:\Users\chris\source\repos\RepsAndSets\RepsAndSets\RepsAndSets.Library\obj\Debug\RepsAndSets.Library.csprojAssemblyReference.cache
